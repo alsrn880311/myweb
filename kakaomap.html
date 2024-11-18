@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>다음 지도 API</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"> <!-- 모바일 친화적인 뷰포트 설정 -->
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden; /* 스크롤바를 숨김 */
+        }
+        #map {
+            width: 100%;
+            height: 100%; /* 지도 크기를 전체 화면으로 설정 */
+            position: relative;
+        }
+        #button-container {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 1; /* 버튼이 지도 위에 표시되도록 z-index 설정 */
+            background-color: rgba(255, 255, 255, 0.7); /* 버튼 배경을 반투명하게 설정 */
+            padding: 10px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+<div id="map"></div>
+<div id="button-container">
+    <button onclick="showMessage()">확인</button>
+</div>
+
+<script src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=31bbd6a9fde88fe78850351d2e30859a&libraries=clusterer,services,drawing"></script>
+<script>
+    var mapContainer = document.getElementById('map'), // 지도를 표시할 div
+        mapOption = {
+            center: new kakao.maps.LatLng(35.69950041916367, 127.33471787409486), // 지도의 중심좌표
+            level: 3, // 지도의 확대 레벨
+            mapTypeId : kakao.maps.MapTypeId.ROADMAP // 지도종류
+        };
+
+    // 지도를 생성한다
+    var map = new kakao.maps.Map(mapContainer, mapOption);
+
+    // 지도 타입 변경 컨트롤을 생성한다
+    var mapTypeControl = new kakao.maps.MapTypeControl();
+
+    // 지도의 상단 우측에 지도 타입 변경 컨트롤을 추가한다
+    map.addControl(mapTypeControl, kakao.maps.ControlPosition.TOPRIGHT);
+
+    // 마커 클러스터러를 생성합니다
+    var clusterer = new kakao.maps.MarkerClusterer({
+        map: map, // 마커들을 클러스터로 관리하고 표시할 지도 객체
+        averageCenter: true, // 클러스터에 포함된 마커들의 평균 위치를 클러스터 마커 위치로 설정
+        minLevel: 2 // 클러스터 할 최소 지도 레벨
+    });
+
+    // 지도가 성공적으로 로드되었을 때 메시지 박스 표시
+    kakao.maps.event.addListener(map, 'tilesloaded', function() {
+        alert('지도 로드 완료');
+    });
+
+    // 버튼 클릭 시 메시지 박스 표시 함수
+    function showMessage() {
+        alert('버튼이 클릭되었습니다.');
+    }
+</script>
+</body>
+</html>
